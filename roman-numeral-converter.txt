@@ -1,0 +1,50 @@
+function convertToRoman(num) {
+  //Array of numeral objects
+  const romanNumerals = [
+    {I: 1},
+    {IV: 4},
+    {V: 5},
+    {IX: 9},
+    {X: 10},
+    {XL: 40},
+    {L: 50},
+    {XC: 90},
+    {C: 100},
+    {CD: 400},
+    {D: 500},
+    {CM: 900},
+    {M: 1000}
+  ];
+
+  //numerals is an array which will hold all final numerals and be converted to the final returned string
+  let numerals = [];
+
+  //newNum keeps track of remainders for dividing
+  let newNum = num;
+
+  //Loop through each numeral dividing num by each relevant numeral
+  for (let i = romanNumerals.length - 1; i >= 0; i--) {
+
+    //Store numeral and value in variables
+    let numeral = Object.keys(romanNumerals[i])[0];
+    let numeralValue = romanNumerals[i][Object.keys(romanNumerals[i])];
+
+    //n is number of each numeral to push
+    let n = 0;
+
+    //Determine number of each numeral to push and update newNum
+    if (newNum >= numeralValue) {
+      n = Math.floor(newNum / numeralValue);
+      newNum = newNum % numeralValue;
+      for (let j = 0; j < n; j++) {
+        numerals.push(numeral);
+      }
+    }
+  }
+  numerals = numerals.join("")
+  console.log(numerals);
+  return numerals;
+}
+
+
+convertToRoman(3999);

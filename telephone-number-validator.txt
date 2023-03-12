@@ -1,0 +1,67 @@
+function telephoneCheck(str) {
+  let validSymbolsRE = /[^0-9-\s()]/;
+  let numberRE = /[0-9]/g
+  let formatRE = [
+    /\(/,
+    /\)/,
+    /\(/g,
+    /\)/g,
+    /\(\d\d\d\)/,
+    /\D\d\d\D/,
+    /[-]/,
+    /[-]/g
+  ]
+
+  //nArr and n are used to determine how many numbers are in str
+  let n = str.match(numberRE).length;
+
+  //Check that there is a valid amount of numbers
+  if (n != 10 && n != 11) {
+    console.log("Invalid amount of numbers")
+    return false
+  } else if (n == 11 && str[0] != "1") {
+    console.log("Invalid format, invalid country code is likely")
+    return false
+  }
+
+  if (validSymbolsRE.test(str)) {
+    console.log("Invalid char found")
+    return false;
+  }
+
+  if (formatRE[0].test(str) || formatRE[1].test(str)) {
+
+    console.log("FOUND PARENTHESIS")
+    console.log(str)
+
+     if (formatRE[0].test(str) == true && formatRE[1].test(str) == false) {
+       console.log("Invalid Format - No closing parenthesis")
+       return false
+     }
+     if (formatRE[1].test(str) == true  && formatRE[0].test(str) == false) {
+       console.log("Invalid Format - No opening parenthesis")
+       return false
+     }
+     if (str.match(formatRE[2]).length > 1 || str.match(formatRE[3]).length > 1) {
+       console.log("Invalid Format - Too many parenthesis")
+       return false
+     }
+     if (!formatRE[4].test(str)) {
+       console.log("Invalid Format - Parenthesis")
+       return false
+     }
+  }
+
+  if (formatRE[6].test(str)) {
+    if (str.match(formatRE[7]).length > 2) {
+      console.log("Invalid Format - Too many dashes")
+      return false
+    }
+  }
+  
+
+  console.log("Passed the tests!")
+  return true;
+}
+
+telephoneCheck("1(555)-555-5555");

@@ -1,0 +1,21 @@
+function rot13(str) {
+  let newStr = [];
+  let regex = /[A-Z]/
+  for (let i = 0; i < str.length; i++) {
+    if (regex.test(str[i])) {
+      let ascVal = str[i].charCodeAt();
+      ascVal -= 13;
+      if (ascVal < 65) {
+        ascVal += 26;
+      }
+      newStr.push(String.fromCharCode(ascVal))
+    } else {
+      newStr.push(str[i])
+    }
+  }
+  newStr = newStr.join("")
+  console.log(newStr)
+  return newStr;
+}
+
+rot13("SERR PBQR PNZC");

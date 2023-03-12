@@ -1,0 +1,56 @@
+function checkCashRegister(price, cash, cid) {
+  let cashValues = [
+    {"PENNY": 0.01},
+    {"NICKEL": 0.05},
+    {"DIME": 0.1},
+    {"QUARTER": 0.25},
+    {"ONE": 1},
+    {"FIVE": 5},
+    {"TEN": 10},
+    {"TWENTY": 20},
+    {"ONE HUNDRED": 100}
+  ]
+  let changeArr = []
+  let change = cash - price
+  let cidTotal = 0;
+  //get total cash-in-drawer and check if its less than or equal to change due
+  for (let i = 0; i < cid.length; i++) {
+    cidTotal += cid[i][1];
+    cidTotal = parseFloat(cidTotal.toFixed(2));
+  }
+  if (change == cidTotal) {
+    return {status: "CLOSED", change: cid};
+  }
+  if (change > cidTotal) {
+    return {status: "INSUFFICIENT_FUNDS", change: []};
+  }
+  //loop through each cash value find how many of each denomination needed
+  for (let i = cashValues.length - 1; i >= 0; i--) {
+    let denomination = Object.keys(cashValues[i])[0];
+    let value = cashValues[i][Object.keys(cashValues[i])]
+    //n is amount of current denomination
+    let n = 0
+    //get max n for current denomination
+    if (value <= change) {
+      n = Math.floor(change / value)
+    }
+    //check cash-in-drawer to see how many of n can actually be returned
+    if (n > 0) {
+      for (let j = n; j > 0; j--) {
+        if (cid[i][1] >= value * j) {
+          changeArr.push([denomination, value * j]);
+          change -= value * j;
+          change = parseFloat(change.toFixed(2))
+          break
+        }
+      }
+    }
+  }
+  //if change is non-zero at this point exact change cannot be returned
+  if (change > 0) {
+    return {status: "INSUFFICIENT_FUNDS", change: []};
+  }
+  return {status: "OPEN", change: changeArr};
+}
+
+checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
